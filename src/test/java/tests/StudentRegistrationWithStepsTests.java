@@ -2,6 +2,7 @@ package tests;
 
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
@@ -13,6 +14,7 @@ public class StudentRegistrationWithStepsTests extends TestBase {
 
     @Test
     @Disabled
+    @DisplayName("Успешное заполнение формы регистрации студента")
     void successfulFillFormTest() {
         Faker faker = new Faker();
 

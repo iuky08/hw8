@@ -2,6 +2,7 @@ package tests;
 
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,7 @@ public class StudentRegistrationWithFakerTests extends TestBase {
 
     @Test
     @Disabled
+    @DisplayName("Успешное заполнение формы регистрации студента")
     void successfulFillFormTest() {
         Faker faker = new Faker();
 
@@ -83,6 +85,7 @@ public class StudentRegistrationWithFakerTests extends TestBase {
 
     @Test
     @Disabled
+    @DisplayName("Негативный кейс")
     @Tag("negative")
     void negativeFillFormTest() {
         open("https://demoqa.com/automation-practice-form");
