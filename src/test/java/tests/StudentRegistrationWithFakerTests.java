@@ -1,46 +1,52 @@
-package pages;
+package tests;
 
-import io.qameta.allure.Step;
+import com.github.javafaker.Faker;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
-public class StudentRegistrationPage {
+public class StudentRegistrationWithFakerTests extends TestBase {
 
-    String firstName = "Alex",
-            lastName = "Alexov",
-            email = "aa@aa.com",
-            gender = "Other",
-            mobile = "1234567890",
-            dayOfBirth = "10",
-            monthOfBirth = "May",
-            yearOfBirth = "1988",
-            subject1 = "Chemistry",
-            subject2 = "Commerce",
-            hobby1 = "Sports",
-            hobby2 = "Reading",
-            hobby3 = "Music",
-            picture = "1.jpg",
-            currentAddress = "Montenegro 123",
-            state = "Uttar Pradesh",
-            city = "Merrut";
+    @Test
+    @Disabled
+    void successfulFillFormTest() {
+        Faker faker = new Faker();
 
-    @Step("Open students registration form")
-    public void openPage() {
+        String firstName = faker.name().firstName(),
+                lastName = faker.name().lastName(),
+                email = faker.internet().emailAddress(),
+                gender = "Other",
+                mobile = faker.phoneNumber().subscriberNumber(10),
+                dayOfBirth = "10",
+                monthOfBirth = "May",
+                yearOfBirth = "1988",
+                subject1 = "Chemistry",
+                subject2 = "Commerce",
+                hobby1 = "Sports",
+                hobby2 = "Reading",
+                hobby3 = "Music",
+                picture = "1.jpg",
+                currentAddress = faker.address().fullAddress(),
+                state = "Uttar Pradesh",
+                city = "Merrut";
+
         open("https://demoqa.com/automation-practice-form");
         $(".practice-form-wrapper").shouldHave(text("Student Registration Form"));
-    }
 
-    @Step("Fill students registration form")
-    public void fillForm() {
         $("#firstName").val(firstName);
         $("#lastName").val(lastName);
         $("#userEmail").val(email);
         $("#genterWrapper").$(byText(gender)).click();
         $("#userNumber").val(mobile);
         // set date
-        setBirthDate(yearOfBirth, monthOfBirth, dayOfBirth);
+        $("#dateOfBirthInput").clear();
+        $(".react-datepicker__month-select").selectOption(monthOfBirth);
+        $(".react-datepicker__year-select").selectOption(yearOfBirth);
+        $(".react-datepicker__day--0" + dayOfBirth).click();
         // set subject
         $("#subjectsInput").val(subject1);
         $(".subjects-auto-complete__menu-list").$(byText(subject1)).click();
@@ -62,18 +68,7 @@ public class StudentRegistrationPage {
 
         $("#submit").click();
         $("#example-modal-sizes-title-lg").shouldHave(text("Thanks for submitting the form"));
-    }
 
-    @Step("Set date of birth")
-    public void setBirthDate(String year, String month, String day) {
-        $("#dateOfBirthInput").clear();
-        $(".react-datepicker__month-select").selectOption(month);
-        $(".react-datepicker__year-select").selectOption(year);
-        $(".react-datepicker__day--0" + day).click();
-    }
-
-    @Step("Verify successful form submit")
-    public void checkData() {
         $x("//td[text()='Student Name']").parent().shouldHave(text(firstName + " " + lastName));
         $x("//td[text()='Student Email']").parent().shouldHave(text(email));
         $x("//td[text()='Gender']").parent().shouldHave(text(gender));
@@ -84,5 +79,16 @@ public class StudentRegistrationPage {
         $x("//td[text()='Picture']").parent().shouldHave(text(picture));
         $x("//td[text()='Address']").parent().shouldHave(text(currentAddress));
         $x("//td[text()='State and City']").parent().shouldHave(text(state + " " + city));
+    }
+
+    @Test
+    @Disabled
+    @Tag("negative")
+    void negativeFillFormTest() {
+        open("https://demoqa.com/automation-practice-form");
+        $(".practice-form-wrapper").shouldHave(text("Student Registration Form"));
+
+        $("#submit").click();
+        $("#example-modal-sizes-title-lg").shouldHave(text("Thanks for submitting the form"));
     }
 }
